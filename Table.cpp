@@ -4,31 +4,24 @@
 
 #include "Table.h"
 
-Chunk* Table::getChunk(int addres)
+Chunk& Table::getChunk(int addres)
 {
-    try
-    {
-        return table.at(addres);
-    }
-    catch (std::out_of_range&)
-    {
-        return nullptr;
-    }
+    return Table::table.at(addres);
 }
 
 int Table::createChunk()
 {
-    auto ch(indexes);
-    table.insert(indexes, ch);
+    Chunk ch(indexes);
+    Table::table[indexes] = ch;
     return indexes++;
 }
 
 void Table::delChunk(int addres)
 {
-    auto index = table.at(addres);
-    if (!index->isLast)
+    auto index = Table::table.at(addres);
+    if (!index.isLast)
     {
-        delChunk(index->addres);
+        delChunk(index.addres);
     }
     table.erase(addres);
 }

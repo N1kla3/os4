@@ -11,7 +11,8 @@
 
 struct Chunk
 {
-    Chunk(int addres, int alloc) :
+    Chunk() = default;
+    explicit Chunk(int addres) :
         addres(addres),
         copy(1),
         isLast(true)
@@ -20,27 +21,23 @@ struct Chunk
     }
 
     virtual ~Chunk()
-    {
-
-    }
-
+    = default;
 
     int addres;
     int copy;
     bool isLast;
-    char* memory;
-
+    char* memory{};
 };
 
 class Table
 {
     static inline int indexes = 0;
-    static std::map<int, Chunk*> table;
+    static inline std::map<int, Chunk> table{};
 public:
     Table() = delete;
 
     static void delChunk(int addres);
-    static Chunk* getChunk(int addres);
+    static Chunk& getChunk(int addres);
     static int createChunk();
 };
 

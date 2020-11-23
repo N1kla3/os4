@@ -3,15 +3,30 @@
 //
 
 #include "Directory.h"
-#include "File.h"
 #include "Table.h"
 
-File Directory::findDirectory(const std::string &dirName)
+Directory& Directory::findDirectory(const std::string &dirName)
 {
+    for (auto& dir : children)
+    {
+        if (dirName == dir.name)
+        {
+            return dir;
+        }
+    }
+    throw std::exception();
 }
 
-Directory Directory::findFile(const std::string &fileName)
+File& Directory::findFile(const std::string &fileName)
 {
+    for (auto& file : files)
+    {
+        if (fileName == file.name)
+        {
+            return file;
+        }
+    }
+    throw std::exception();
 }
 
 void Directory::addFile(const File& file)
@@ -21,19 +36,26 @@ void Directory::addFile(const File& file)
 
 void Directory::delFile(const File& file)
 {
-    if (Table::getChunk(file.index)->copy == 1)
+    if (Table::getChunk(file.index).copy == 1)
     {
         Table::delChunk(file.index);
+        for (auto start = files.begin(); start != files.end(); start++)
+        {
+            if ((*start).name == file.name)
+            {
+                files.erase(start);
+            }
+        }
     }
     else
     {
-        Table::getChunk(file.index)->copy--;
+        Table::getChunk(file.index).copy--;
     }
 }
 
 void Directory::addDir(const Directory& dir)
 {
-    childs.push_back(dir);
+    children.push_back(dir);
 }
 
 void Directory::delDir(const Directory& dir)
@@ -42,15 +64,15 @@ void Directory::delDir(const Directory& dir)
     {
         delFile(file);
     }
-    for (const auto& direc : dir.childs)
+    for (const auto& direc : dir.children)
     {
         delDir(direc);
     }
-    for (auto start = childs.begin(); start != childs.end(); start++)
+    for (auto start = children.begin(); start != children.end(); start++)
     {
         if ((*start).name == dir.name)
         {
-            childs.erase(start);
+            children.erase(start);
         }
     }
 }

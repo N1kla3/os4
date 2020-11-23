@@ -8,23 +8,22 @@
 
 #include <vector>
 #include <string>
-
-class File;
+#include "File.h"
 
 class Directory
 {
 public:
     std::string name;
 
-    File findDirectory(const std::string& dirName);
-    Directory findFile(const std::string& fileName);
+    Directory& findDirectory(const std::string& dirName);
+    File& findFile(const std::string& fileName);
     void addFile(const File& file);
     void delFile(const File& file);
     void addDir(const Directory& dir);
     void delDir(const Directory& dir);
 private:
-    std::vector<Directory> childs;
-    std::vector<File> files;
+    std::vector<Directory> children{};
+    std::vector<File> files{};
 };
 
 

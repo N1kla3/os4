@@ -4,6 +4,7 @@
 
 #include "FileSystem.h"
 #include <iostream>
+#include "File.h"
 
 
 void FileSystem::run()
@@ -15,15 +16,43 @@ void FileSystem::run()
         if (input == "create")
         {
             std::cin >> input;
-            std::cout << input;
+            current->addFile(File(input));
         }
         else if (input == "del")
         {
-
+            std::cin >> input;
+            try
+            {
+                current->delFile(current->findFile(input));
+            } catch (std::exception&)
+            {
+                std::cout << "NO SUCH FILE\n";
+            }
+        }
+        else if (input == "deldir")
+        {
+            std::cin >> input;
+            try
+            {
+                current->delDir(current->findDirectory(input));
+            } catch (std::exception&)
+            {
+                std::cout << "NO SUCH DIRECTORY\n";
+            }
         }
         else if (input == "copy")
         {
-
+            try
+            {
+                std::cin >> input;
+                File nf = current->findFile(input);
+                std::cin >> input;
+                nf.name = input;
+            }
+            catch (std::exception&)
+            {
+                std::cout << "NO SUCH FILE";
+            }
         }
         else if (input == "move")
         {
@@ -43,4 +72,10 @@ void FileSystem::run()
         }
         std::cout << "\nFS >>>\n";
     }
+}
+
+FileSystem::FileSystem()
+{
+    root = Directory();
+    current = &root;
 }

@@ -12,6 +12,7 @@
 class FileSystem
 {
 public:
+    FileSystem();
     void run();
 
 private:

@@ -8,10 +8,17 @@
 
 
 #include <string>
+#include <utility>
+#include "Table.h"
 
 class File
 {
 public:
+    explicit File(std::string  name) :
+        name(std::move(name))
+    {
+        index = Table::createChunk();
+    }
     int index;
     std::string name;
 
