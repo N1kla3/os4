@@ -21,7 +21,8 @@ public:
     }
     int index;
     std::string name;
-
+    void write(char* buf)const;
+    std::string read()const;
 };
 
 

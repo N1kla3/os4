@@ -8,6 +8,7 @@
 
 #include <map>
 #include <memory>
+#include <cstring>
 
 struct Chunk
 {
@@ -21,12 +22,24 @@ struct Chunk
     }
 
     virtual ~Chunk()
-    = default;
+    {
+        if (deletable)
+            delete memory;
+    }
+
+    void allocateMem(char* buff)
+    {
+        memory = new char[sizeof(buff)];
+        std::strcpy(memory, buff);
+        deletable = true;
+    }
 
     int addres;
     int copy;
     bool isLast;
-    char* memory{};
+    char* memory;
+private:
+    bool deletable = false;
 };
 
 class Table
