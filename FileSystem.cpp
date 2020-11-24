@@ -16,7 +16,12 @@ void FileSystem::run()
         if (input == "create")
         {
             std::cin >> input;
-            current->addFile(File(input));
+            current->addFile(input);
+        }
+        else if (input == "createdir")
+        {
+            std::cin >> input;
+            current->addDir(input);
         }
         else if (input == "del")
         {
@@ -45,9 +50,11 @@ void FileSystem::run()
             try
             {
                 std::cin >> input;
-                File nf = current->findFile(input);
+                int index = current->findFile(input)->index;
                 std::cin >> input;
-                nf.name = input;
+                auto nf = std::make_shared<File>(input);
+                nf->index = index;
+                Table::getChunk(nf->index)->copy++;
             }
             catch (std::exception&)
             {
@@ -56,7 +63,19 @@ void FileSystem::run()
         }
         else if (input == "move")
         {
-
+            std::cin >> input;
+            try
+            {
+                auto dir = current->findDirectory(input);
+                std::cin >> input;
+                auto file = current->findFile(input);
+                dir->moveFile(file);
+                current->delFile(file);
+            }
+            catch (std::exception&)
+            {
+                std::cout << "NO SUCH CONSUMABLES";
+            }
         }
         else if (input == "read")
         {
@@ -65,6 +84,27 @@ void FileSystem::run()
         else if (input == "write")
         {
 
+        }
+        else if (input == "cd")
+        {
+            std::cin >> input;
+            if (input == root->name)
+            {
+                current = root;
+            } else {
+                try
+                {
+                    current = current->findDirectory(input);
+                }
+                catch (std::exception&)
+                {
+                    std::cout << "NO SUCH DIRECTORY\n";
+                }
+            }
+        }
+        else if (input == "ls")
+        {
+            current->print();
         }
         else
         {
@@ -76,6 +116,6 @@ void FileSystem::run()
 
 FileSystem::FileSystem()
 {
-    root = Directory();
-    current = &root;
+    root = std::make_shared<Directory>(Directory("root"));
+    current = root;
 }

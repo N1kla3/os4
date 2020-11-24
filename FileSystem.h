@@ -16,8 +16,8 @@ public:
     void run();
 
 private:
-    Directory root;
-    Directory* current;
+    std::shared_ptr<Directory> root;
+    std::shared_ptr<Directory> current;
 };
 
 

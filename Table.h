@@ -32,12 +32,12 @@ struct Chunk
 class Table
 {
     static inline int indexes = 0;
-    static inline std::map<int, Chunk> table{};
+    static inline std::map<int, std::unique_ptr<Chunk>> table{};
 public:
     Table() = delete;
 
     static void delChunk(int addres);
-    static Chunk& getChunk(int addres);
+    static std::unique_ptr<Chunk>& getChunk(int addres);
     static int createChunk();
 };
 

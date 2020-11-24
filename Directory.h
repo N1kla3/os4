@@ -6,6 +6,7 @@
 #define OS4_DIRECTORY_H
 
 
+#include <utility>
 #include <vector>
 #include <string>
 #include "File.h"
@@ -14,16 +15,23 @@ class Directory
 {
 public:
     std::string name;
+    Directory() = default;
+    explicit Directory(std::string  name) :
+        name(std::move(name))
+    {
 
-    Directory& findDirectory(const std::string& dirName);
-    File& findFile(const std::string& fileName);
-    void addFile(const File& file);
-    void delFile(const File& file);
-    void addDir(const Directory& dir);
-    void delDir(const Directory& dir);
+    }
+    std::shared_ptr<Directory> & findDirectory(const std::string& dirName);
+    std::shared_ptr<File> & findFile(const std::string& fileName);
+    void addFile(const std::string& file);
+    void moveFile(std::shared_ptr<File>& file);
+    void delFile(std::shared_ptr<File> &file);
+    void addDir(const std::string& dir);
+    void delDir(std::shared_ptr<Directory>& dir);
+    void print();
 private:
-    std::vector<Directory> children{};
-    std::vector<File> files{};
+    std::vector<std::shared_ptr<Directory>> children{};
+    std::vector<std::shared_ptr<File>> files{};
 };
 
 
